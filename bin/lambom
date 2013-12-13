@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'lambom'
+puts Lambom.build_node(ARGV)
