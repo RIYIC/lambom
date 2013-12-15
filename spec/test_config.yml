@@ -1,0 +1,4 @@
+server: 1ca71cd6-08c4-4855-9381-2f41aeffe59c
+environment: development
+private_key_file: /etc/riyic/private.pem
+loglevel: debug
