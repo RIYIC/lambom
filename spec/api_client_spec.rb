@@ -18,5 +18,10 @@ describe Lambom::ApiClient do
         it "must connect to riyic api" do
             expect(api.get_server_config).to match(/^\{.+\}$/)
         end
+        it "must fail to connect to api" do
+            conf.merge(server: "61a75d44-9856-4e64-a269-111111111111")
+            api2 = Lambom::ApiClient.new(conf)
+            expect{api2.get_server_config}.to raise_error(/api error/)
+        end
     end
 end
