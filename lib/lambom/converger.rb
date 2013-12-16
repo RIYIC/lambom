@@ -23,7 +23,7 @@ module Lambom
         CHEF_CONF_FILE = '/etc/chef/solo.rb'
         
         CHEF_CONF = {
-            development: '
+            :development => '
 cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/cookbooks"]
 '
         }
