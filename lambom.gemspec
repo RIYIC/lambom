@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name        = 'lambom'
-  s.version     = '0.1.0'
-  s.date        = '2013-12-13'
-  s.summary     = "Tool to apply riyic servers personalities"
-  s.description = "Riyic is a server configuration service based on chef (http://riyic.com). The lambom gem is a tool to apply, through chef-solo, your riyic configurations"
+  s.version     = '0.1.1'
+  s.date        = '2013-12-16'
+  s.summary     = "Tool to apply riyic configurations"
+  s.description = "Riyic is a server configuration service based on chef (http://riyic.com). The lambom gem is a tool to apply, through chef-solo, your riyic configurations in your server"
   s.authors     = ["J. Gomez"]
   s.email       = 'alambike@gmail.com'
   s.require_paths = ["lib"]
