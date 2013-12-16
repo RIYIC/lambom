@@ -8,7 +8,8 @@ require 'net/http'
 module Lambom
     class ApiClient
         API_URL = {
-            :production => "http://riyic.com/api/v1",
+            #:production => "https://riyic.com/api/v1",
+            :production => "http://www2.ruleyourcloud.com/api/v1",
             :development => "http://10.0.3.1:3000/api/v1"
         }
 

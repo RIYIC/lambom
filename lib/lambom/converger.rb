@@ -20,7 +20,7 @@ module Lambom
                          rvm_version
         }
 
-        CHEF_CONF_FILE = '/etc/chef/solo.rb'
+        CHEF_CONF_FILE = "#{Lambom::Config::CONFIG_DIR}/solo.rb"
         
         CHEF_CONF = {
             :development => '
@@ -55,6 +55,7 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
             file.close
 
             run_cmd('/usr/bin/chef-solo',
+                    '-c',CHEF_CONF_FILE,
                     '--log_level', conf.loglevel,
                     '--logfile', "#{conf.logdir}/#{conf.logfile}",
                     '-j', filename)
@@ -74,7 +75,7 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
             File.chmod(0750,TEMP)
 
             # establecemos o archivo de configuracion de chef segun o entorno
-            switch_chef_conf(conf.environment)
+            switch_chef_conf(conf.environment.to_sym)
         end
 
         def descargar_cookbooks
@@ -87,9 +88,13 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
         end
 
         def switch_chef_conf(env)
+            file = File.new(CHEF_CONF_FILE,"w")
+
             if CHEF_CONF.has_key?(env)
-                IO.write(CHEF_CONF_FILE,CHEF_CONF[env])
+                file.write(CHEF_CONF[env])
             end
+
+            file.close
         end
     end
 end
