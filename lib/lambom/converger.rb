@@ -1,6 +1,6 @@
 module Lambom
     class Converger
-        extend ShellMixin
+        include ShellMixin
         
         COOKBOOKS_URL = 'http://www2.ruleyourcloud.com/cookbooks.tar.gz'
         
@@ -49,13 +49,15 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
 
         def ejecutar_converger
 
-            file = "#{TEMP}/#{conf.server}.json"
-            IO.write(file, json)
+            filename = "#{TEMP}/#{conf.server}.json"
+            file = File.new(filename,"w")
+            file.write(attributes_json)
+            file.close
 
             run_cmd('/usr/bin/chef-solo',
-                   '--log_level', conf.loglevel,
-                   '--logfile', "#{conf.logdir}/#{conf.logfile}",
-                   '-j', file)
+                    '--log_level', conf.loglevel,
+                    '--logfile', "#{conf.logdir}/#{conf.logfile}",
+                    '-j', filename)
 
         end
 
@@ -67,6 +69,10 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
             FileUtils.mkdir_p(conf.logdir) unless Dir.exists?(conf.logdir)
             File.chmod(0750, conf.logdir)
 
+            #creamos o directorio cache de chef
+            FileUtils.mkdir_p(TEMP) unless Dir.exists?(TEMP)
+            File.chmod(0750,TEMP)
+
             # establecemos o archivo de configuracion de chef segun o entorno
             switch_chef_conf(conf.environment)
         end
@@ -74,14 +80,14 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
         def descargar_cookbooks
             unless (conf.environment == 'development')
                 # aqui podemos meter unha ejecucion de berkshelf para descargar os cookbooks necesarios
-                run_cmd('wget','-O','/tmp/cookbooks.tar.gz', COOKBOOKS_URL)
+                run_cmd('curl','-o','/tmp/cookbooks.tar.gz', '-L',COOKBOOKS_URL)
                 FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless Dir.exists?(DEFAULT_CHEF_PATH)
                 run_cmd('tar','xzf','/tmp/cookbooks.tar.gz','--no-same-owner','-C', DEFAULT_CHEF_PATH);
             end
         end
 
         def switch_chef_conf(env)
-            if CHEF_CONF.has_key(env)
+            if CHEF_CONF.has_key?(env)
                 IO.write(CHEF_CONF_FILE,CHEF_CONF[env])
             end
         end
