@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.executables << 'lambom'
   s.files         = `git ls-files`.split($/)
+  s.license       = 'Apache-2.0'
 
   s.add_runtime_dependency "oj","~> 2.0"
   s.add_runtime_dependency "mixlib-authentication","~> 1.3"

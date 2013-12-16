@@ -14,7 +14,7 @@ OptionParser.new do |opts|
     opts.banner = "Usage: lambom [options]"
 
     opts.on("-j", "--json [JSON FILE]",
-           "Run server configuration with server attributes json file") do |j|
+           "Run server configuration with json attributes file") do |j|
         options[:json_file] = j
     end
 
@@ -28,7 +28,7 @@ OptionParser.new do |opts|
         options[:server] = s
     end
 
-    opts.on("-k", "--keyfile [PEM PRIVATE KEYFILE]",
+    opts.on("-k", "--keyfile [PRIVATE KEYFILE]",
             "PEM Private keyfile to sign api requests") do |k|
         options[:private_key_file] = k
     end
