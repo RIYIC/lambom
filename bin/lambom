@@ -40,4 +40,5 @@ OptionParser.new do |opts|
 
 end.parse!
 
-puts Lambom.run(options)
+status = Lambom.run(options)
+(status)? exit(0): exit(1)
