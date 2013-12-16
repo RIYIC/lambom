@@ -66,11 +66,11 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
             ENV["PATH"] = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
             
             #creamos directorio de logs
-            FileUtils.mkdir_p(conf.logdir) unless Dir.exists?(conf.logdir)
+            FileUtils.mkdir_p(conf.logdir) unless File.directory?(conf.logdir)
             File.chmod(0750, conf.logdir)
 
             #creamos o directorio cache de chef
-            FileUtils.mkdir_p(TEMP) unless Dir.exists?(TEMP)
+            FileUtils.mkdir_p(TEMP) unless File.directory?(TEMP)
             File.chmod(0750,TEMP)
 
             # establecemos o archivo de configuracion de chef segun o entorno
@@ -81,7 +81,7 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
             unless (conf.environment == 'development')
                 # aqui podemos meter unha ejecucion de berkshelf para descargar os cookbooks necesarios
                 run_cmd('curl','-o','/tmp/cookbooks.tar.gz', '-L',COOKBOOKS_URL)
-                FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless Dir.exists?(DEFAULT_CHEF_PATH)
+                FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless File.directory?(DEFAULT_CHEF_PATH)
                 run_cmd('tar','xzf','/tmp/cookbooks.tar.gz','--no-same-owner','-C', DEFAULT_CHEF_PATH);
             end
         end
