@@ -13,7 +13,7 @@ require "lambom/converger"
 
 
 module Lambom
-    $debug = true
+    $debug = false
 
     class << self
         def run(argv)
@@ -28,8 +28,8 @@ module Lambom
 
             attributes = {}
             # descargar atributos do servidor (a menos que nos pasen json_file => file.json)
-            if argv.has_key?("json_file")
-                json_attributes = IO.read(argv["json_file"])
+            if argv.has_key?(:json_file)
+                json_attributes = IO.read(argv[:json_file])
             else
                 json_attributes = Lambom::ApiClient.new(conf).get_server_config
             end

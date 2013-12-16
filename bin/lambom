@@ -40,5 +40,13 @@ OptionParser.new do |opts|
 
 end.parse!
 
-status = Lambom.run(options)
-(status)? exit(0): exit(1)
+out = ''
+begin
+    out = Lambom.run(options)
+rescue Exception => e
+    puts "Error: #{e.message}"
+    exit 1
+end
+
+puts "Command executed successfully"
+
