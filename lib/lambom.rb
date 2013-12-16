@@ -6,9 +6,11 @@ require 'digest/sha1'
 require 'openssl'
 require 'net/http'
 
+require "lambom/shell_mixin"
 require "lambom/config"
 require "lambom/api"
 require "lambom/converger"
+
 
 module Lambom
     $debug = true

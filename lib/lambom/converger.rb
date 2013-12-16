@@ -61,11 +61,11 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
 
         def preparar_entorno
             ENV_VARS_DELETE.each {|v| ENV.delete(v)}
-            ENV["PATH"] = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin';
+            ENV["PATH"] = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
             
             #creamos directorio de logs
-            FileUtils.mkdir_p(conf.logdir) unless(Dir.exists?(conf.logdir);
-            File.chmod(0750, conf.logdir);
+            FileUtils.mkdir_p(conf.logdir) unless Dir.exists?(conf.logdir)
+            File.chmod(0750, conf.logdir)
 
             # establecemos o archivo de configuracion de chef segun o entorno
             switch_chef_conf(conf.environment)
