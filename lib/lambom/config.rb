@@ -6,14 +6,15 @@ module Lambom
 
 
         attr_accessor :server, :private_key_file, :environment, :loglevel
-        
+        attr_reader :logdir, :logfile
+
         def initialize
             @server = nil
             @private_key_file = nil
             @environment = 'production'
             @loglevel = 'debug'
             @logdir = '/var/log/riyic'
-            #@logfile = 'solo_#{}'
+            @logfile = "solo_#{Time.now.strftime("%F_%T")}"
         end
 
         def load
