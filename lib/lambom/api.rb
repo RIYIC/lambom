@@ -13,8 +13,8 @@ module Lambom
         }
 
         def initialize(conf)
-            @server_id = conf.server or throw "Required parameter 'server' not found"
-            @private_key_file = conf.private_key_file or throw "Required parameter 'private_key_file' not found"
+            @server_id = conf.server or raise "Required parameter \"server\" not found"
+            @private_key_file = conf.private_key_file or raise "Required parameter \"private_key_file\" not found"
             @env = conf.environment
 
             @api_url = (@env == "production")?

@@ -2,7 +2,7 @@ require 'yaml'
 
 module Lambom
     class Config
-        FILE = '/etc/riyic/lambom.yml'
+        FILE = '/etc/riyic/lambom.conf'
 
 
         attr_accessor :server, :private_key_file, :environment, :loglevel
