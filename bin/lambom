@@ -1,4 +1,43 @@
 #!/usr/bin/env ruby
 
 require 'lambom'
-puts Lambom.build_node(ARGV)
+require 'optparse'
+
+# -e environment
+# -j json_file
+# -s server
+# -l loglevel
+# -k private_key_file
+options = {}
+
+OptionParser.new do |opts|
+    opts.banner = "Usage: lambom [options]"
+
+    opts.on("-j", "--json [JSON FILE]",
+           "Run server configuration with server attributes json file") do |j|
+        options[:json_file] = j
+    end
+
+    opts.on("-e", "--env [ENVIRONMENT]",
+            "Select environment") do |e|
+        options[:environment] = e
+    end
+
+    opts.on("-s", "--server [SERVER_UUID]",
+            "Set server to which get configuration from riyic api") do |s|
+        options[:server] = s
+    end
+
+    opts.on("-k", "--keyfile [PEM PRIVATE KEYFILE]",
+            "PEM Private keyfile to sign api requests") do |k|
+        options[:private_key_file] = k
+    end
+    
+    opts.on("-l","--loglevel [LOG_LEVEL]",
+            "Set loglevel") do |l|
+        options[:loglevel] = l
+    end
+
+end.parse!
+
+puts Lambom.run(options)
