@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'lambom'
-  s.version     = '0.2.0'
+  s.version     = '0.2.1'
   s.date        = '2013-12-17'
   s.summary     = "Tool to apply riyic configurations"
   s.description = "Riyic is a server configuration service based on chef (http://riyic.com). The lambom gem is a tool to apply, through chef-solo, your riyic configurations in your server"

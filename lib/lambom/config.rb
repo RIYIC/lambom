@@ -30,13 +30,16 @@ module Lambom
                 raise "Error loading yaml config file #{FILE}, syntax error in line #{$1}"
             end
 
-            puts h.inspect if $debug
+            puts "hash de opcions: #{h.inspect}" if $debug
 
-            h.each do |k,v|
-                if validate(k,v)
-                    instance_variable_set "@#{k}".to_sym, v
-                else
-                    raise "Invalid value '#{v}' to parameter '#{k}'"
+            # evitamos cargar as opcions si non e un hash
+            if h.class == Hash 
+                h.each do |k,v|
+                    if validate(k,v)
+                        instance_variable_set "@#{k}".to_sym, v
+                    else
+                        raise "Invalid value '#{v}' to parameter '#{k}'"
+                    end
                 end
             end
             
