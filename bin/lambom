@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'lambom'
+require 'lambom/version'
 require 'optparse'
 
 # -e environment
@@ -36,6 +37,11 @@ OptionParser.new do |opts|
     opts.on("-l","--loglevel [LOG_LEVEL]",
             "Set loglevel") do |l|
         options[:loglevel] = l
+    end
+    
+    opts.on_tail("-v", "--version", "Show version") do
+        puts Lambom::VERSION
+        exit
     end
 
 end.parse!

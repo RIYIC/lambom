@@ -1,6 +1,11 @@
+# -*- encoding: utf-8 -*-
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require "lambom/version"
+
 Gem::Specification.new do |s|
   s.name        = 'lambom'
-  s.version     = '0.2.1'
+  s.version     = Lambom::VERSION
   s.date        = '2013-12-17'
   s.summary     = "Tool to apply riyic configurations"
   s.description = "Riyic is a server configuration service based on chef (http://riyic.com). The lambom gem is a tool to apply, through chef-solo, your riyic configurations in your server"
