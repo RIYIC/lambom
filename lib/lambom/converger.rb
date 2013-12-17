@@ -88,6 +88,9 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
         end
 
         def switch_chef_conf(env)
+            FileUtils.mkdir_p(Lambom::Config::CONFIG_DIR) unless File.directory?(Lambom::Config::CONFIG_DIR)
+            File.chmod(0750,Lambom::Config::CONFIG_DIR)
+
             file = File.new(CHEF_CONF_FILE,"w")
 
             if CHEF_CONF.has_key?(env)
