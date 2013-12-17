@@ -6,7 +6,7 @@ module Lambom
         
         DEFAULT_CHEF_PATH = '/var/chef'
         
-        TEMP = "#{DEFAULT_CHEF_PATH}/cache"
+        CACHE_PATH = "#{DEFAULT_CHEF_PATH}/cache"
         
         ENV_VARS_DELETE = %w{
                          GEM_PATH 
@@ -21,11 +21,19 @@ module Lambom
         }
 
         CHEF_CONF_FILE = "#{Lambom::Config::CONFIG_DIR}/solo.rb"
-        
-        CHEF_CONF = {
-            :development => '
+ 
+        CHEF_CONF_DEV = <<EOF
 cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/cookbooks"]
-'
+file_cache_path "#{CACHE_PATH}"
+EOF
+
+        CHEF_CONF_OTHER = <<EOF
+cookbook_path ["#{DEFAULT_CHEF_PATH}/cookbooks", "#{DEFAULT_CHEF_PATH}/site-cookbooks"]
+file_cache_path "#{CACHE_PATH}"
+EOF
+        CHEF_CONF = {
+            :development => CHEF_CONF_DEV,
+            :other => CHEF_CONF_OTHER,
         }
 
         def initialize(conf, json)
@@ -49,7 +57,7 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
 
         def ejecutar_converger
 
-            filename = "#{TEMP}/#{conf.server}.json"
+            filename = "#{CACHE_PATH}/#{conf.server}.json"
             file = File.new(filename,"w")
             file.write(attributes_json)
             file.close
@@ -71,8 +79,8 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
             File.chmod(0750, conf.logdir)
 
             #creamos o directorio cache de chef
-            FileUtils.mkdir_p(TEMP) unless File.directory?(TEMP)
-            File.chmod(0750,TEMP)
+            FileUtils.mkdir_p(CACHE_PATH) unless File.directory?(CACHE_PATH)
+            File.chmod(0750,CACHE_PATH)
 
             # establecemos o archivo de configuracion de chef segun o entorno
             switch_chef_conf(conf.environment.to_sym)
@@ -95,7 +103,10 @@ cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/co
 
             if CHEF_CONF.has_key?(env)
                 file.write(CHEF_CONF[env])
+            else
+                file.write(CHEF_CONF[:other])
             end
+
 
             file.close
         end
