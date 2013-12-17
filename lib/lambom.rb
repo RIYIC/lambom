@@ -18,7 +18,7 @@ module Lambom
     class << self
         def run(argv)
             puts "DEBUG ENABLED" if $debug
-            puts "args recibidos #{argv.inspect}" if $debug
+            puts "Recived args: #{argv.inspect}" if $debug
             raise 'Must run as root' unless Process.uid == 0
 
             #cargar config

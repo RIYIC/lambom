@@ -62,11 +62,20 @@ EOF
             file.write(attributes_json)
             file.close
 
-            run_cmd('/usr/bin/chef-solo',
-                    '-c',CHEF_CONF_FILE,
-                    '--log_level', conf.loglevel,
-                    '--logfile', "#{conf.logdir}/#{conf.logfile}",
-                    '-j', filename)
+            logfile = ($debug)? "STDOUT" : "#{conf.logdir}/#{conf.logfile}"
+            
+            cmd = %W{
+               chef-solo
+               -c #{CHEF_CONF_FILE}
+               --log_level #{conf.loglevel}
+               -j #{filename}
+            }
+            
+            unless $debug
+                cmd += ["--logfile", logfile]
+            end
+            
+            run_cmd cmd
 
         end
 

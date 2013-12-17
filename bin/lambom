@@ -39,6 +39,11 @@ OptionParser.new do |opts|
         options[:loglevel] = l
     end
     
+    opts.on("-d","--debug",
+            "Debug mode") do
+	Lambom.enable_debug
+    end
+    
     opts.on_tail("-v", "--version", "Show version") do
         puts Lambom::VERSION
         exit
@@ -55,4 +60,3 @@ rescue Exception => e
 end
 
 puts "Command executed successfully"
-
