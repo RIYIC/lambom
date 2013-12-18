@@ -99,9 +99,11 @@ EOF
         def descargar_cookbooks
             unless (conf.environment == 'development')
                 # aqui podemos meter unha ejecucion de berkshelf para descargar os cookbooks necesarios
-                run_cmd('curl','-o','/tmp/cookbooks.tar.gz', '-L',COOKBOOKS_URL)
+                temp = "/tmp/cookbooks.tar.gz"
+                run_cmd('curl','-o',temp, '-L',COOKBOOKS_URL)
                 FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless File.directory?(DEFAULT_CHEF_PATH)
-                run_cmd('tar','xzf','/tmp/cookbooks.tar.gz','--no-same-owner','-C', DEFAULT_CHEF_PATH);
+                run_cmd('tar','xzf',temp,'--no-same-owner','-C', DEFAULT_CHEF_PATH)
+                File.unlink(temp)
             end
         end
 
