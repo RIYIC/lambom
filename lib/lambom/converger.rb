@@ -62,8 +62,6 @@ EOF
             file.write(attributes_json)
             file.close
 
-            logfile = ($debug)? "STDOUT" : "#{conf.logdir}/#{conf.logfile}"
-            
             cmd = %W{
                chef-solo
                -c #{CHEF_CONF_FILE}
@@ -72,10 +70,13 @@ EOF
             }
             
             unless $debug
-                cmd += ["--logfile", logfile]
+                cmd += [
+                    "--logfile", 
+                    "#{conf.logdir}/#{conf.logfile}"
+                ]
             end
             
-            run_cmd cmd
+            run_cmd *cmd
 
         end
 

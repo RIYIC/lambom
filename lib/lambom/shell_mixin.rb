@@ -2,7 +2,7 @@ require 'mixlib/shellout'
 
 module Lambom
     module ShellMixin
-        def run_cmd(cmd)
+        def run_cmd(*cmd)
 
             opts = {}
 

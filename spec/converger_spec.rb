@@ -4,9 +4,10 @@ require "lambom/converger"
 describe Lambom::Converger do
     conf = Lambom::Config.new
 
-    conf.merge(environment: 'test',
-              server: '61a75d44-9856-4e64-a269-f95a232c9bcd',
-              private_key_file: "spec/private_key.pem")
+    conf.merge(:environment => "production",
+              :server => "4586273f-f17a-4984-99ef-69c255e1b395",
+              :private_key_file => "spec/private_key.pem",
+              :loglevel => 'info' )
     json = <<EOF
 {
   "riyic": {
