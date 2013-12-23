@@ -6,7 +6,7 @@ require "lambom/version"
 Gem::Specification.new do |s|
   s.name        = 'lambom'
   s.version     = Lambom::VERSION
-  s.date        = '2013-12-17'
+  s.date        = '2013-12-23'
   s.summary     = "Tool to apply riyic configurations"
   s.description = "Riyic is a server configuration service based on chef (http://riyic.com). The lambom gem is a tool to apply, through chef-solo, your riyic configurations in your server"
   s.authors     = ["J. Gomez"]
