@@ -56,8 +56,9 @@ EOF
         private
 
         def ejecutar_converger
+            name = conf.server || String.random(8)
 
-            filename = "#{CACHE_PATH}/#{conf.server}.json"
+            filename = "#{CACHE_PATH}/#{name}.json"
             file = File.new(filename,"w")
             file.write(attributes_json)
             file.close
