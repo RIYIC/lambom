@@ -16,9 +16,11 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($/)
   s.license       = 'Apache-2.0'
 
-  s.add_runtime_dependency "oj","~> 2.0"
-  s.add_runtime_dependency "mixlib-authentication","~> 1.3"
-  s.add_runtime_dependency "mixlib-shellout","~> 1.3"
+  s.add_runtime_dependency "oj","~> 2.5.4"
+  s.add_runtime_dependency "mixlib-authentication","~> 1.3.0"
+  s.add_runtime_dependency "mixlib-shellout","~> 1.3.0"
+  s.add_runtime_dependency "chef","~> 11.8.2"
+  s.add_runtime_dependency "berkshelf","~> 2.0.12"
 
   s.add_development_dependency "rspec", "~> 2.0"
 
