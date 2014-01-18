@@ -7,25 +7,23 @@ require 'net/http'
 
 module Lambom
     class ApiClient
-        API_URL = {
-            #:production => "https://riyic.com/api/v1",
-            :production => "http://www2.ruleyourcloud.com/api/v1",
-            :development => "http://10.0.3.1:3000/api/v1"
-        }
+        DEFAULT_API_URL =  "https://riyic.com/api/v1"
 
         def initialize(conf)
             @server_id = conf.server or raise "Required parameter \"server\" not found"
             @private_key_file = conf.private_key_file or raise "Required parameter \"private_key_file\" not found"
             @env = conf.environment
 
-            @api_url = (@env == "production")?
-                API_URL[:production]:
-                API_URL[:development]
+            @api_url = conf.api_url || DEFAULT_API_URL
         end
 
         def get_server_config
             get('servers',"#{@server_id}/generate_config");
 
+        end
+
+        def get_berksfile
+            get("servers","#{@server_id}/berksfile")
         end
 
 
@@ -57,7 +55,7 @@ module Lambom
             end
             
             http = Net::HTTP.new(uri.host, uri.port)
-            #http.use_ssl = true
+            http.use_ssl = true if uri.scheme == 'https'
 
             response = http.request(req)
             puts response.body if $debug
@@ -105,7 +103,6 @@ module Lambom
               :user_id => server_id.to_s,
               :http_method => request.method.to_s,
               :timestamp => Time.now.iso8601,
-              #:file => MockFile.new,
               :path => request.path.to_s,
               :proto_version => 1.1
             }

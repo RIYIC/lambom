@@ -2,8 +2,6 @@ module Lambom
     class Converger
         include ShellMixin
         
-        COOKBOOKS_URL = 'http://www2.ruleyourcloud.com/cookbooks.tar.gz'
-        
         DEFAULT_CHEF_PATH = '/var/chef'
         
         CACHE_PATH = "#{DEFAULT_CHEF_PATH}/cache"
@@ -36,9 +34,11 @@ EOF
             :other => CHEF_CONF_OTHER,
         }
 
-        def initialize(conf, json)
+        def initialize(conf)
             @conf = conf
-            @attributes_json = json
+            @name = conf.server || String.random(8)
+            @json_file = conf.json_file
+            @berksfile = conf.berksfile
         end
 
 
@@ -47,7 +47,9 @@ EOF
         def run
             preparar_entorno
 
-            descargar_cookbooks
+            descargar_atributos unless conf.json_file
+
+            descargar_cookbooks unless conf.cached || conf.environment == 'development'
 
             ejecutar_converger
         end
@@ -55,19 +57,62 @@ EOF
 
         private
 
-        def ejecutar_converger
-            name = conf.server || String.random(8)
+        def descargar_atributos
+            
+            # descargar atributos do servidor (a menos que nos pasen json_file => file.json)
+            json_attributes = Lambom::ApiClient.new(conf).get_server_config
 
-            filename = "#{CACHE_PATH}/#{name}.json"
-            file = File.new(filename,"w")
-            file.write(attributes_json)
+            @json_file = "#{CACHE_PATH}/#{@name}.json"
+
+            file = File.new(@json_file,"w")
+            file.write(json_attributes)
             file.close
+
+        end
+
+        def descargar_cookbooks
+            if conf.download_tarball
+                # aqui podemos meter unha ejecucion de berkshelf para descargar os cookbooks necesarios
+                temp = "/tmp/cookbooks.tar.gz"
+                run_cmd('curl','-o',temp, '-L',conf.download_tarball)
+                FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless File.directory?(DEFAULT_CHEF_PATH)
+                run_cmd('tar','xzf',temp,'--no-same-owner','-C', DEFAULT_CHEF_PATH)
+                File.unlink(temp)
+            else
+                # usamos berkshelf para descargar os cookbooks
+                # Descargamos o berksfile dende riyic se non nolo proporcionan
+                descargar_berksfile unless @berksfile
+                berks_install
+            end
+        end
+
+        def descargar_berksfile
+            @berksfile = "#{CACHE_PATH}/#{@name}.berksfile"
+            berksfile_str = Lambom::ApiClient.new(conf).get_berksfile
+
+            file = File.new(@berksfile,"w")
+            file.write(berksfile_str)
+            file.close
+        end
+
+
+        def berks_install
+            cmd = %W{
+                berks install -b #{@berksfile} -p #{DEFAULT_CHEF_PATH}/cookbooks
+            }
+
+            run_cmd *cmd       
+
+        end
+
+
+        def ejecutar_converger
 
             cmd = %W{
                chef-solo
                -c #{CHEF_CONF_FILE}
                --log_level #{conf.loglevel}
-               -j #{filename}
+               -j #{@json_file}
             }
             
             unless $debug
@@ -97,16 +142,6 @@ EOF
             switch_chef_conf(conf.environment.to_sym)
         end
 
-        def descargar_cookbooks
-            unless (conf.environment == 'development')
-                # aqui podemos meter unha ejecucion de berkshelf para descargar os cookbooks necesarios
-                temp = "/tmp/cookbooks.tar.gz"
-                run_cmd('curl','-o',temp, '-L',COOKBOOKS_URL)
-                FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless File.directory?(DEFAULT_CHEF_PATH)
-                run_cmd('tar','xzf',temp,'--no-same-owner','-C', DEFAULT_CHEF_PATH)
-                File.unlink(temp)
-            end
-        end
 
         def switch_chef_conf(env)
             FileUtils.mkdir_p(Lambom::Config::CONFIG_DIR) unless File.directory?(Lambom::Config::CONFIG_DIR)

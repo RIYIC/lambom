@@ -6,7 +6,8 @@ describe Lambom::ApiClient do
     
     conf.merge(environment: "production",
               server: "4586273f-f17a-4984-99ef-69c255e1b395",
-              private_key_file: "spec/private_key.pem")
+              private_key_file: "spec/private_key.pem",
+              api_url: "http://172.17.42.1:3000/api/v1")
 
     api = Lambom::ApiClient.new(conf)
 

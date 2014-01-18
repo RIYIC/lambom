@@ -1,0 +1,10 @@
+{
+  "riyic": {
+    "dockerized": "no",
+    "updates_check_interval": "never",
+    "env": "development"
+  },
+  "run_list": [
+    "recipe[riyic::default]"
+  ]
+}

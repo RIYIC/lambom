@@ -19,7 +19,7 @@ module Lambom
         def run(argv)
             puts "DEBUG ENABLED" if $debug
             puts "Recived args: #{argv.inspect}" if $debug
-            raise 'Must run as root' unless Process.uid == 0
+            raise 'Must be run as root' unless Process.uid == 0
 
             #cargar config
             conf = Lambom::Config.new.load
@@ -27,16 +27,8 @@ module Lambom
             # sobreescribimos a configuracion ca linea de comandos
             conf.merge(argv)
 
-            attributes = {}
-            # descargar atributos do servidor (a menos que nos pasen json_file => file.json)
-            if argv.has_key?(:json_file)
-                json_attributes = IO.read(argv[:json_file])
-            else
-                json_attributes = Lambom::ApiClient.new(conf).get_server_config
-            end
-
             # executar converxencia
-            Lambom::Converger.new(conf,json_attributes).run
+            Lambom::Converger.new(conf).run
         end
 
 

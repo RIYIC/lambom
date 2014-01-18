@@ -14,10 +14,31 @@ options = {}
 OptionParser.new do |opts|
     opts.banner = "Usage: lambom [options]"
 
+    opts.on("-A", "--api [API ENDPOINT URL]",
+           "RIYIC Api endpoint to connect to download the server configuration") do |j|
+        options[:api_url] = j
+    end
+
     opts.on("-j", "--json [JSON FILE]",
-           "Run server configuration with json attributes file") do |j|
+           "Run server convergence with configuration from json attributes file") do |j|
         options[:json_file] = j
     end
+
+    opts.on("-b", "--berksfile [BERKSFILE FILE]",
+           "Use specified berksfile to download cookbooks and dependencies") do |j|
+        options[:berksfile] = b
+    end
+
+    opts.on("-c", "--cached",
+           "Use local cached cookbooks") do
+        options[:cached] = true
+    end
+
+    opts.on("-D", "--download [TARBALL URL]",
+           "Download cookbooks tarball from url and unpack it in cookbooks chef path") do |d|
+        options[:download_tarball] = d
+    end
+
 
     opts.on("-e", "--env [ENVIRONMENT]",
             "Select environment") do |e|
@@ -25,7 +46,7 @@ OptionParser.new do |opts|
     end
 
     opts.on("-s", "--server [SERVER_UUID]",
-            "Set server to which get configuration from riyic api") do |s|
+            "Sets the server uuid to which to download configuration from RIYIC api") do |s|
         options[:server] = s
     end
 
@@ -41,7 +62,7 @@ OptionParser.new do |opts|
     
     opts.on("-d","--debug",
             "Debug mode") do
-	Lambom.enable_debug
+        Lambom.enable_debug
     end
     
     opts.on_tail("-v", "--version", "Show version") do

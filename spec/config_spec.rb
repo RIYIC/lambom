@@ -14,12 +14,12 @@ describe Lambom::Config do
         it "must have test file values" do
             expect(config.server).to eq("1ca71cd6-08c4-4855-9381-2f41aeffe59c")
             expect(config.environment).to eq("development")
-            expect(config.private_key_file).to eq("/etc/riyic/private.pem")
+            expect(config.private_key_file).to eq("spec/private_key.pem")
             expect(config.loglevel).to eq("debug")
         end
 
         it "must have merged values" do
-            merge_key_file = 'test.pem'
+            merge_key_file = 'spec/test_private_key.pem'
             merge_server = "1ca71cd6-08c4-4855-9381-111111111111"
             merge_env = 'test'
             merge_loglevel = 'info'
