@@ -1,3 +1,4 @@
+require "berkshelf/cli"
 module Lambom
     class Converger
         include ShellMixin
@@ -59,7 +60,7 @@ EOF
 
         def descargar_atributos
             
-            # descargar atributos do servidor (a menos que nos pasen json_file => file.json)
+            # descargar atributos do servidor 
             json_attributes = Lambom::ApiClient.new(conf).get_server_config
 
             @json_file = "#{CACHE_PATH}/#{@name}.json"
@@ -72,15 +73,15 @@ EOF
 
         def descargar_cookbooks
             if conf.download_tarball
-                # aqui podemos meter unha ejecucion de berkshelf para descargar os cookbooks necesarios
+                # download cookbooks from a tarball
                 temp = "/tmp/cookbooks.tar.gz"
                 run_cmd('curl','-o',temp, '-L',conf.download_tarball)
                 FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless File.directory?(DEFAULT_CHEF_PATH)
                 run_cmd('tar','xzf',temp,'--no-same-owner','-C', DEFAULT_CHEF_PATH)
                 File.unlink(temp)
             else
-                # usamos berkshelf para descargar os cookbooks
-                # Descargamos o berksfile dende riyic se non nolo proporcionan
+                # use berkshelf to download cookbooks
+                # Download berksfile from riyic unless it was passed by command line
                 descargar_berksfile unless @berksfile
                 berks_install
             end
@@ -104,6 +105,13 @@ EOF
             run_cmd *cmd       
 
         end
+
+
+        # def berks_install
+        #     Berkshelf::Cli.new.invoke('berkshelf:install', 
+        #         ['-b',@berksfile,'-p',"#{DEFAULT_CHEF_PATH}/cookbooks"],
+        #         :config => '/tmp/test')
+        # end
 
 
         def ejecutar_converger
