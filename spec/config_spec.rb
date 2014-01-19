@@ -16,6 +16,12 @@ describe Lambom::Config do
             expect(config.environment).to eq("development")
             expect(config.private_key_file).to eq("spec/private_key.pem")
             expect(config.loglevel).to eq("debug")
+            expect(config.berksfile).to eq("spec/test_berksfile")
+            expect(config.json_file).to eq("spec/test_json_file")
+            expect(config.cached).to eq(false)
+            expect(config.api_url).to eq("https://www.riyic.com/api/v1")
+            expect(config.download_tarball).to eq("https://www.riyic.com/cookbooks.tar.gz")
+
         end
 
         it "must have merged values" do
