@@ -1,4 +1,4 @@
-require "berkshelf/cli"
+#require "berkshelf/cli"
 module Lambom
     class Converger
         include ShellMixin
