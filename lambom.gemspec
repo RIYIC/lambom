@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.summary     = "Tool to configure servers based on chef-solo and berkshelf"
   s.description = <<-EOF
 Riyic is a server configuration service based on chef (http://riyic.com).
-The lambom gem is a tool to apply chef configurations generated in the riyic service, or defined in a pair of plain text files 
-(a json attributes file where details server configuration and a berkshelf file where specify cookbooks restrictions and sources).
+The lambom gem is a tool to apply chef configurations generated with the riyic service, or defined in a pair of plain text files 
+(a json attributes file where the server configuration is detailed and a berkshelf file which specifies cookbooks restrictions and sources).
 EOF
 
   s.authors     = ["J. Gomez"]
