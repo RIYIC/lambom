@@ -6,12 +6,12 @@ require "lambom/version"
 Gem::Specification.new do |s|
   s.name        = 'lambom'
   s.version     = Lambom::VERSION
-  s.date        = '2013-12-23'
-  s.summary     = "Tool to apply chef configurations"
+  s.date        = '2014-01-21'
+  s.summary     = "Tool to configure servers based on chef-solo and berkshelf"
   s.description = <<-EOF
 Riyic is a server configuration service based on chef (http://riyic.com).
-The lambom gem is a tool to apply defined chef configurations stored in riyic service, 
-or in a pair of plain text files (the json attributes file and berkshelf file).
+The lambom gem is a tool to apply chef configurations generated in the riyic service, or defined in a pair of plain text files 
+(a json attributes file where details server configuration and a berkshelf file where specify cookbooks restrictions and sources).
 EOF
 
   s.authors     = ["J. Gomez"]
