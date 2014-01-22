@@ -107,13 +107,6 @@ EOF
         end
 
 
-        # def berks_install
-        #     Berkshelf::Cli.new.invoke('berkshelf:install', 
-        #         ['-b',@berksfile,'-p',"#{DEFAULT_CHEF_PATH}/cookbooks"],
-        #         :config => '/tmp/test')
-        # end
-
-
         def ejecutar_converger
 
             cmd = %W{
@@ -135,8 +128,9 @@ EOF
         end
 
         def preparar_entorno
-            ENV_VARS_DELETE.each {|v| ENV.delete(v)}
-            ENV["PATH"] = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+            # dont drop ruby vars from env
+            #ENV_VARS_DELETE.each {|v| ENV.delete(v)}
+            #ENV["PATH"] = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
             
             #creamos directorio de logs
             FileUtils.mkdir_p(conf.logdir) unless File.directory?(conf.logdir)
