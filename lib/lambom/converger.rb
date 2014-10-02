@@ -72,39 +72,44 @@ EOF
         end
 
         def descargar_cookbooks
+            
             if conf.download_tarball
+            
                 # download cookbooks from a tarball
                 temp = "/tmp/cookbooks.tar.gz"
                 run_cmd('curl','-o',temp, '-L',conf.download_tarball)
                 FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless File.directory?(DEFAULT_CHEF_PATH)
                 run_cmd('tar','xzf',temp,'--no-same-owner','-C', DEFAULT_CHEF_PATH)
                 File.unlink(temp)
-            else
-                # use berkshelf to download cookbooks
-                # Download berksfile from riyic unless it was passed by command line
-                descargar_berksfile unless @berksfile
-                berks_install
+                
             end
+            
+            # else
+            #     # use berkshelf to download cookbooks
+            #     # Download berksfile from riyic unless it was passed by command line
+            #     descargar_berksfile unless @berksfile
+            #     berks_install
+            # end
         end
 
-        def descargar_berksfile
-            @berksfile = "#{CACHE_PATH}/#{@name}.berksfile"
-            berksfile_str = Lambom::ApiClient.new(conf).get_berksfile
+        # def descargar_berksfile
+        #     @berksfile = "#{CACHE_PATH}/#{@name}.berksfile"
+        #     berksfile_str = Lambom::ApiClient.new(conf).get_berksfile
 
-            file = File.new(@berksfile,"w")
-            file.write(berksfile_str)
-            file.close
-        end
+        #     file = File.new(@berksfile,"w")
+        #     file.write(berksfile_str)
+        #     file.close
+        # end
 
 
-        def berks_install
-            cmd = %W{
-                berks install -b #{@berksfile} -p #{DEFAULT_CHEF_PATH}/cookbooks
-            }
+        # def berks_install
+        #     cmd = %W{
+        #         berks install -b #{@berksfile} -p #{DEFAULT_CHEF_PATH}/cookbooks
+        #     }
 
-            run_cmd *cmd       
+        #     run_cmd *cmd       
 
-        end
+        # end
 
 
         def ejecutar_converger

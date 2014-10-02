@@ -24,10 +24,10 @@ OptionParser.new do |opts|
         options[:json_file] = j
     end
 
-    opts.on("-b", "--berksfile [BERKSFILE FILE]",
-           "Use specified berksfile to download cookbooks and dependencies") do |j|
-        options[:berksfile] = b
-    end
+    # opts.on("-b", "--berksfile [BERKSFILE FILE]",
+    #        "Use specified berksfile to download cookbooks and dependencies") do |j|
+    #     options[:berksfile] = b
+    # end
 
     opts.on("-c", "--cached",
            "Use local cached cookbooks") do
