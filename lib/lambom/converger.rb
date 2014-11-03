@@ -1,4 +1,5 @@
 #require "berkshelf/cli"
+require 'chef/application/solo'
 module Lambom
     class Converger
         include ShellMixin
@@ -22,7 +23,7 @@ module Lambom
         CHEF_CONF_FILE = "#{Lambom::Config::CONFIG_DIR}/solo.rb"
  
         CHEF_CONF_DEV = <<EOF
-cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/cookbooks"]
+cookbook_path ["/mnt/cookbooks/supermarket", "/mnt/others/cookbooks", "/mnt/riyic/cookbooks"]
 file_cache_path "#{CACHE_PATH}"
 EOF
 
@@ -114,8 +115,22 @@ EOF
 
         def ejecutar_converger
 
+            #cmd = %W{
+            #   chef-solo
+            #   -c #{CHEF_CONF_FILE}
+            #   --log_level #{conf.loglevel}
+            #   -j #{@json_file}
+            #}
+            #
+            #unless $debug
+            #    cmd += [
+            #        "--logfile", 
+            #        "#{conf.logdir}/#{conf.logfile}"
+            #    ]
+            #end
+            #run_cmd *cmd
+            
             cmd = %W{
-               chef-solo
                -c #{CHEF_CONF_FILE}
                --log_level #{conf.loglevel}
                -j #{@json_file}
@@ -127,10 +142,16 @@ EOF
                     "#{conf.logdir}/#{conf.logfile}"
                 ]
             end
-            
-            run_cmd *cmd
 
+            # reseteamos argv
+            ARGV.clear
+            cmd.each do |arg|
+                ARGV << arg
+            end
+
+            Chef::Application::Solo.new.run
         end
+
 
         def preparar_entorno
             # dont drop ruby vars from env
