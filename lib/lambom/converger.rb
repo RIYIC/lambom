@@ -1,4 +1,5 @@
 #require "berkshelf/cli"
+require 'chef/application/solo'
 module Lambom
     class Converger
         include ShellMixin
@@ -22,7 +23,7 @@ module Lambom
         CHEF_CONF_FILE = "#{Lambom::Config::CONFIG_DIR}/solo.rb"
  
         CHEF_CONF_DEV = <<EOF
-cookbook_path ["/mnt/opscode/cookbooks", "/mnt/others/cookbooks", "/mnt/riyic/cookbooks"]
+cookbook_path ["/mnt/cookbooks/supermarket", "/mnt/others/cookbooks", "/mnt/riyic/cookbooks"]
 file_cache_path "#{CACHE_PATH}"
 EOF
 
@@ -72,45 +73,64 @@ EOF
         end
 
         def descargar_cookbooks
+            
             if conf.download_tarball
+            
                 # download cookbooks from a tarball
                 temp = "/tmp/cookbooks.tar.gz"
                 run_cmd('curl','-o',temp, '-L',conf.download_tarball)
                 FileUtils.mkdir_p(DEFAULT_CHEF_PATH) unless File.directory?(DEFAULT_CHEF_PATH)
                 run_cmd('tar','xzf',temp,'--no-same-owner','-C', DEFAULT_CHEF_PATH)
                 File.unlink(temp)
-            else
-                # use berkshelf to download cookbooks
-                # Download berksfile from riyic unless it was passed by command line
-                descargar_berksfile unless @berksfile
-                berks_install
+                
             end
+            
+            # else
+            #     # use berkshelf to download cookbooks
+            #     # Download berksfile from riyic unless it was passed by command line
+            #     descargar_berksfile unless @berksfile
+            #     berks_install
+            # end
         end
 
-        def descargar_berksfile
-            @berksfile = "#{CACHE_PATH}/#{@name}.berksfile"
-            berksfile_str = Lambom::ApiClient.new(conf).get_berksfile
+        # def descargar_berksfile
+        #     @berksfile = "#{CACHE_PATH}/#{@name}.berksfile"
+        #     berksfile_str = Lambom::ApiClient.new(conf).get_berksfile
 
-            file = File.new(@berksfile,"w")
-            file.write(berksfile_str)
-            file.close
-        end
+        #     file = File.new(@berksfile,"w")
+        #     file.write(berksfile_str)
+        #     file.close
+        # end
 
 
-        def berks_install
-            cmd = %W{
-                berks install -b #{@berksfile} -p #{DEFAULT_CHEF_PATH}/cookbooks
-            }
+        # def berks_install
+        #     cmd = %W{
+        #         berks install -b #{@berksfile} -p #{DEFAULT_CHEF_PATH}/cookbooks
+        #     }
 
-            run_cmd *cmd       
+        #     run_cmd *cmd       
 
-        end
+        # end
 
 
         def ejecutar_converger
 
+            #cmd = %W{
+            #   chef-solo
+            #   -c #{CHEF_CONF_FILE}
+            #   --log_level #{conf.loglevel}
+            #   -j #{@json_file}
+            #}
+            #
+            #unless $debug
+            #    cmd += [
+            #        "--logfile", 
+            #        "#{conf.logdir}/#{conf.logfile}"
+            #    ]
+            #end
+            #run_cmd *cmd
+            
             cmd = %W{
-               chef-solo
                -c #{CHEF_CONF_FILE}
                --log_level #{conf.loglevel}
                -j #{@json_file}
@@ -122,10 +142,16 @@ EOF
                     "#{conf.logdir}/#{conf.logfile}"
                 ]
             end
-            
-            run_cmd *cmd
 
+            # reseteamos argv
+            ARGV.clear
+            cmd.each do |arg|
+                ARGV << arg
+            end
+
+            Chef::Application::Solo.new.run
         end
+
 
         def preparar_entorno
             # dont drop ruby vars from env
