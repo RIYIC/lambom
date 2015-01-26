@@ -25,7 +25,7 @@ EOF
   #s.add_runtime_dependency "mixlib-authentication","~> 1.3"
   #s.add_runtime_dependency "mixlib-shellout","~> 1.3"
   #s.add_runtime_dependency "chef","~> 11.8"
-  s.add_runtime_dependency "chef"
+  s.add_runtime_dependency "chef", "~> 12.0.3"
 
   # s.add_runtime_dependency "berkshelf","~> 2.0.12"
 
