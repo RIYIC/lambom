@@ -28,7 +28,7 @@ module Lambom
             @environment = 'production'
             @loglevel = 'debug'
             @logdir = '/var/log/riyic'
-            @logfile = "solo_#{Time.now.strftime("%F_%T")}"
+            @logfile = "solo_#{Time.now.strftime("%Y%m%d%H%M%S")}"
             @download_tarball = nil
             @api_url = nil
         end
