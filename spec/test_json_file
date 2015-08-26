@@ -1,6 +1,5 @@
 {
   "riyic": {
-    "dockerized": "no",
     "updates_check_interval": "never",
     "env": "development"
   },
