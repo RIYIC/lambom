@@ -74,10 +74,21 @@ end.parse!
 
 out = ''
 begin
+
     out = Lambom.run(options)
-rescue Exception => e
+
+rescue StandardError => e
+
     puts "Error: #{e.message}"
     exit 1
+
+rescue SystemExit => s
+    
+    unless s.success?
+        puts "Error executing convergence: #{out}"
+        exit s.status
+    end
+
 end
 
 puts "Command executed successfully"
