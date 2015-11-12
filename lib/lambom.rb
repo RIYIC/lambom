@@ -13,25 +13,25 @@ require "lambom/converger"
 
 
 module Lambom
-    $debug = false
+  $debug = false
 
-    class << self
-        def run(argv)
-            puts "DEBUG ENABLED" if $debug
-            puts "Recived args: #{argv.inspect}" if $debug
-            raise 'Must be run as root' unless Process.uid == 0
+  class << self
+    def run(argv)
+      puts "DEBUG ENABLED" if $debug
+      puts "Recived args: #{argv.inspect}" if $debug
+      raise 'Must be run as root' unless Process.uid == 0
 
-            #cargar config
-            conf = Lambom::Config.new.load(argv)
-            
-            # executar converxencia
-            Lambom::Converger.new(conf).run
-        end
-
-
-        def enable_debug
-            $debug = true
-        end
+      #cargar config
+      conf = Lambom::Config.new.load(argv)
+      
+      # executar converxencia
+      Lambom::Converger.new(conf).run
     end
+
+
+    def enable_debug
+      $debug = true
+    end
+  end
 
 end
