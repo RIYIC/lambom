@@ -22,11 +22,8 @@ module Lambom
             raise 'Must be run as root' unless Process.uid == 0
 
             #cargar config
-            conf = Lambom::Config.new.load
+            conf = Lambom::Config.new.load(argv)
             
-            # sobreescribimos a configuracion ca linea de comandos
-            conf.merge(argv)
-
             # executar converxencia
             Lambom::Converger.new(conf).run
         end
